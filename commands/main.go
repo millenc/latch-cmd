@@ -61,6 +61,7 @@ func AddCommands() {
 	MainCmd.AddCommand(LockCmd)
 	MainCmd.AddCommand(UnlockCmd)
 	MainCmd.AddCommand(OperationLockCmd)
+	MainCmd.AddCommand(OperationUnlockCmd)
 
 }
 
