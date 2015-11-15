@@ -1,0 +1,10 @@
+#Build
+*.exe
+
+# IDEs
+*.sublime-project
+*.sublime-workspace
+
+#OS Junk
+.DS_Store
+Thumbs.db
