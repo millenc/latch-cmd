@@ -55,6 +55,7 @@ func Execute() {
 //Adds subcommands to the root command
 func AddCommands() {
 	MainCmd.AddCommand(PairCmd)
+	MainCmd.AddCommand(UnpairCmd)
 	MainCmd.AddCommand(StatusCmd)
 	MainCmd.AddCommand(OperationStatusCmd)
 }
