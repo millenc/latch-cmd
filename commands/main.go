@@ -56,6 +56,7 @@ func Execute() {
 func AddCommands() {
 	MainCmd.AddCommand(PairCmd)
 	MainCmd.AddCommand(StatusCmd)
+	MainCmd.AddCommand(OperationStatusCmd)
 }
 
 //Initializes the latch object that will be used by all subcommands
