@@ -60,6 +60,8 @@ func AddCommands() {
 	MainCmd.AddCommand(OperationStatusCmd)
 	MainCmd.AddCommand(LockCmd)
 	MainCmd.AddCommand(UnlockCmd)
+	MainCmd.AddCommand(OperationLockCmd)
+
 }
 
 //Initializes the latch object that will be used by all subcommands
