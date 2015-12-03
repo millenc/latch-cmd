@@ -17,7 +17,7 @@ func init() {
 
 //Status command
 var OperationStatusCmd = &cobra.Command{
-	Use:   "operation-status",
+	Use:   "status",
 	Short: "Gets the current status of an operation using an account ID (--accountid) and an operation ID (--operationid).",
 	Run: func(cmd *cobra.Command, args []string) {
 		if AccountID == "" {

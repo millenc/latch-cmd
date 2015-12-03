@@ -13,7 +13,7 @@ func init() {
 
 //Operation lock command
 var OperationLockCmd = &cobra.Command{
-	Use:   "operation-lock",
+	Use:   "lock",
 	Short: "Locks the operation using it's account ID (--accountid) and operation ID (--operationid).",
 	Run: func(cmd *cobra.Command, args []string) {
 		if AccountID == "" {

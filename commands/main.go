@@ -33,7 +33,7 @@ var MainCmd = &cobra.Command{
 	},
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		//Init latch struct used by subcommands
-		if cmd.Use != "latch-cmd" {
+		if cmd.Use != "latch-cmd" && cmd.Use != "operation" {
 			if l, err := NewLatch(AppID, SecretKey); err != nil {
 				Session.Halt(err)
 			} else {
@@ -57,12 +57,9 @@ func AddCommands() {
 	MainCmd.AddCommand(PairCmd)
 	MainCmd.AddCommand(UnpairCmd)
 	MainCmd.AddCommand(StatusCmd)
-	MainCmd.AddCommand(OperationStatusCmd)
 	MainCmd.AddCommand(LockCmd)
 	MainCmd.AddCommand(UnlockCmd)
-	MainCmd.AddCommand(OperationLockCmd)
-	MainCmd.AddCommand(OperationUnlockCmd)
-
+	MainCmd.AddCommand(OperationCmd)
 }
 
 //Initializes the latch object that will be used by all subcommands
