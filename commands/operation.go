@@ -11,6 +11,7 @@ func init() {
 	OperationCmd.AddCommand(OperationAddCmd)
 	OperationCmd.AddCommand(OperationUpdateCmd)
 	OperationCmd.AddCommand(OperationDeleteCmd)
+	OperationCmd.AddCommand(OperationShowCmd)
 }
 
 var OperationCmd = &cobra.Command{
