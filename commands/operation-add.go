@@ -20,7 +20,7 @@ func init() {
 	OperationAddCmd.PersistentFlags().StringVarP(&LockOnRequest, "lock-on-request", "l", golatch.DISABLED, "Lock On Request (possible values are MANDATORY,OPT_IN and DISABLED)")
 }
 
-//Add Operation command
+//Add operation command
 var OperationAddCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Adds a new operation",
