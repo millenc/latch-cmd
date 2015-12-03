@@ -2,6 +2,7 @@ package session
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"os"
 )
 
@@ -57,7 +58,7 @@ func (session *LatchCmdSession) AddSuccess(Content string) {
 //Outputs messages
 func (session *LatchCmdSession) Output() {
 	for _, message := range session.Messages {
-		fmt.Println("[" + message.Type + "]: " + message.Content)
+		fmt.Println("[" + session.FormatMessageType(message.Type) + "]: " + message.Content)
 	}
 }
 
@@ -66,4 +67,19 @@ func (session *LatchCmdSession) Halt(err error) {
 	session.AddError(err.Error())
 	session.Output()
 	os.Exit(-1)
+}
+
+func (session *LatchCmdSession) FormatMessageType(messageType string) string {
+	switch messageType {
+	case MESSAGE_TYPE_INFO:
+		return color.BlueString("Info")
+	case MESSAGE_TYPE_WARNING:
+		return color.YellowString("Warning")
+	case MESSAGE_TYPE_ERROR:
+		return color.RedString("Error")
+	case MESSAGE_TYPE_SUCCESS:
+		return color.GreenString("Success")
+	}
+
+	return messageType
 }
