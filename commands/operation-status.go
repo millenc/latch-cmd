@@ -13,6 +13,7 @@ func init() {
 	OperationStatusCmd.PersistentFlags().StringVarP(&AccountID, "accountid", "i", "", "Account ID")
 	OperationStatusCmd.PersistentFlags().StringVarP(&OperationID, "operationid", "o", "", "Operation ID")
 	OperationStatusCmd.PersistentFlags().BoolVarP(&NoOTP, "nootp", "n", false, "No OTP")
+	OperationStatusCmd.PersistentFlags().BoolVarP(&Silent, "silent", "l", false, "Silent (requires SILVER, GOLD or PLATINUM subscription)")
 }
 
 //Status command
@@ -27,7 +28,7 @@ var OperationStatusCmd = &cobra.Command{
 			Session.Halt(errors.New("You must provide an Operation ID (--operationid)."))
 		}
 
-		if resp, err := Latch.OperationStatus(AccountID, OperationID, NoOTP); err == nil {
+		if resp, err := Latch.OperationStatus(AccountID, OperationID, NoOTP, Silent); err == nil {
 			Session.AddSuccess("Operation status: " + resp.Status())
 		} else {
 			Session.Halt(err)
