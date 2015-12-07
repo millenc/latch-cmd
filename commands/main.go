@@ -5,16 +5,19 @@ import (
 	"github.com/millenc/golatch"
 	"github.com/millenc/latch-cmd/session"
 	"github.com/spf13/cobra"
+	"net/url"
 )
 
 //Flag variables
 var AppID string
 var SecretKey string
+var Proxy string
 
 //Flag initialization
 func init() {
 	MainCmd.PersistentFlags().StringVarP(&AppID, "app", "a", "", "Application's ID")
 	MainCmd.PersistentFlags().StringVarP(&SecretKey, "secret", "s", "", "Secret key")
+	MainCmd.PersistentFlags().StringVarP(&Proxy, "proxy", "p", "", "Proxy URL")
 }
 
 //Latch struct
@@ -34,7 +37,7 @@ var MainCmd = &cobra.Command{
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		//Init latch struct used by subcommands
 		if cmd.Use != "latch-cmd" && cmd.Use != "operation" {
-			if l, err := NewLatch(AppID, SecretKey); err != nil {
+			if l, err := NewLatch(AppID, SecretKey, Proxy); err != nil {
 				Session.Halt(err)
 			} else {
 				Latch = l
@@ -63,7 +66,7 @@ func AddCommands() {
 }
 
 //Initializes the latch object that will be used by all subcommands
-func NewLatch(AppID string, SecretKey string) (latch *golatch.Latch, err error) {
+func NewLatch(AppID string, SecretKey string, Proxy string) (latch *golatch.Latch, err error) {
 	if AppID == "" {
 		err = errors.New("You must provide an Application's ID (--appid).")
 	}
@@ -73,6 +76,12 @@ func NewLatch(AppID string, SecretKey string) (latch *golatch.Latch, err error) 
 
 	if err == nil {
 		latch = golatch.NewLatch(AppID, SecretKey)
+
+		if Proxy != "" {
+			if proxyUrl, err := url.Parse(Proxy); err == nil {
+				latch.SetProxy(proxyUrl)
+			}
+		}
 	}
 
 	return latch, err
