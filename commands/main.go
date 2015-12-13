@@ -63,6 +63,7 @@ func AddCommands() {
 	MainCmd.AddCommand(LockCmd)
 	MainCmd.AddCommand(UnlockCmd)
 	MainCmd.AddCommand(OperationCmd)
+	MainCmd.AddCommand(HistoryCmd)
 }
 
 //Initializes the latch object that will be used by all subcommands
