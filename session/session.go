@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"os"
+	"text/tabwriter"
 )
 
 //Stores messages produced during the command run
@@ -57,9 +58,15 @@ func (session *LatchCmdSession) AddSuccess(Content string) {
 
 //Outputs messages
 func (session *LatchCmdSession) Output() {
+	w := new(tabwriter.Writer)
+	w.Init(os.Stdout, 0, 8, 2, ' ', 0)
+
+	fmt.Fprintln(w, "")
 	for _, message := range session.Messages {
-		fmt.Println("[" + session.FormatMessageType(message.Type) + "]: " + message.Content)
+		fmt.Fprintln(w, session.FormatMessageType(message.Type)+"\t"+message.Content)
 	}
+
+	w.Flush()
 }
 
 //Prints all the messages stored in the session and halts the command execution with the provided error
@@ -72,13 +79,13 @@ func (session *LatchCmdSession) Halt(err error) {
 func (session *LatchCmdSession) FormatMessageType(messageType string) string {
 	switch messageType {
 	case MESSAGE_TYPE_INFO:
-		return color.BlueString("Info")
+		return color.BlueString("info")
 	case MESSAGE_TYPE_WARNING:
-		return color.YellowString("Warning")
+		return color.YellowString("warning")
 	case MESSAGE_TYPE_ERROR:
-		return color.RedString("Error")
+		return color.RedString("error")
 	case MESSAGE_TYPE_SUCCESS:
-		return color.GreenString("Success")
+		return color.GreenString("success")
 	}
 
 	return messageType
