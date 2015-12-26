@@ -99,13 +99,13 @@ func NewLatch(AppID string, SecretKey string, Proxy string) (latch *golatch.Latc
 				Session.AddInfo("headers\t" + request.GetSerializedHeaders())
 				Session.AddInfo("signature\t" + strings.Replace(request.GetRequestSignature(), "\n", "\n\t\t", -1))
 				Session.AddInfo("signature-sha1\t" + request.GetSignedRequestSignature())
-				Session.AddInfo("auth-header\t" + request.GetAuthorizationHeader())
+				Session.AddInfo("auth-header\t" + request.GetAuthorizationHeader() + "\n\t\t")
 			}
 
 			latch.OnResponseReceive = func(request *golatch.LatchRequest, response *http.Response, responseBody string) {
 				Session.AddInfo("response:\t")
 				Session.AddInfo(fmt.Sprintf("http-status\t%d", response.StatusCode))
-				Session.AddInfo("body\t" + responseBody)
+				Session.AddInfo("body\t" + responseBody + "\n\t\t")
 			}
 		}
 	}
