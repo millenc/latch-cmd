@@ -2,22 +2,27 @@ package commands
 
 import (
 	"errors"
+	"fmt"
 	"github.com/millenc/golatch"
 	"github.com/millenc/latch-cmd/session"
 	"github.com/spf13/cobra"
+	"net/http"
 	"net/url"
+	"strings"
 )
 
 //Flag variables
 var AppID string
 var SecretKey string
 var Proxy string
+var Verbose bool
 
 //Flag initialization
 func init() {
 	MainCmd.PersistentFlags().StringVarP(&AppID, "app", "a", "", "Application's ID")
 	MainCmd.PersistentFlags().StringVarP(&SecretKey, "secret", "s", "", "Secret key")
 	MainCmd.PersistentFlags().StringVarP(&Proxy, "proxy", "p", "", "Proxy URL")
+	MainCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "Display additional information about what's going on on each call")
 }
 
 //Latch struct
@@ -81,6 +86,26 @@ func NewLatch(AppID string, SecretKey string, Proxy string) (latch *golatch.Latc
 		if Proxy != "" {
 			if proxyUrl, err := url.Parse(Proxy); err == nil {
 				latch.SetProxy(proxyUrl)
+			}
+		}
+
+		if Verbose {
+			latch.OnRequestStart = func(request *golatch.LatchRequest) {
+				Session.AddInfo("request:\t")
+				Session.AddInfo("url\t" + request.URL.String())
+				Session.AddInfo("http-method\t" + request.HttpMethod)
+				Session.AddInfo("date\t" + request.GetFormattedDate())
+				Session.AddInfo("params\t" + request.GetSerializedParams())
+				Session.AddInfo("headers\t" + request.GetSerializedHeaders())
+				Session.AddInfo("signature\t" + strings.Replace(request.GetRequestSignature(), "\n", "\n\t\t", -1))
+				Session.AddInfo("signature-sha1\t" + request.GetSignedRequestSignature())
+				Session.AddInfo("auth-header\t" + request.GetAuthorizationHeader())
+			}
+
+			latch.OnResponseReceive = func(request *golatch.LatchRequest, response *http.Response, responseBody string) {
+				Session.AddInfo("response:\t")
+				Session.AddInfo(fmt.Sprintf("http-status\t%d", response.StatusCode))
+				Session.AddInfo("body\t" + responseBody)
 			}
 		}
 	}
