@@ -5,8 +5,8 @@ import (
 )
 
 func init() {
-	/*ApplicationCmd.AddCommand(ApplicationAddCmd)
-	ApplicationCmd.AddCommand(ApplicationUpdateCmd)
+	ApplicationCmd.AddCommand(ApplicationAddCmd)
+	/*ApplicationCmd.AddCommand(ApplicationUpdateCmd)
 	ApplicationCmd.AddCommand(ApplicationDeleteCmd)*/
 	ApplicationCmd.AddCommand(ApplicationShowCmd)
 }
