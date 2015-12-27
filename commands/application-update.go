@@ -18,7 +18,7 @@ func init() {
 	ApplicationUpdateCmd.PersistentFlags().StringVarP(&LockOnRequest, "lock-on-request", "l", "", "Lock On Request (possible values are MANDATORY,OPT_IN and DISABLED)")
 }
 
-//Add operation command
+//Update operation command
 var ApplicationUpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Updates an existing application",
