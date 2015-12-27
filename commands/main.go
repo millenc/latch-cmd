@@ -27,4 +27,5 @@ func Execute() {
 //Adds subcommands to the root command
 func AddCommands() {
 	MainCmd.AddCommand(AppCmd)
+	MainCmd.AddCommand(UserCmd)
 }
