@@ -42,7 +42,7 @@ var UserCmd = &cobra.Command{
 		}
 	},
 	PersistentPostRun: func(cmd *cobra.Command, args []string) {
-		Session.Output()
+		Session.End()
 	},
 }
 

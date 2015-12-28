@@ -3,6 +3,7 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"github.com/millenc/golatch"
 	"github.com/spf13/cobra"
 	"time"
 )
@@ -32,6 +33,13 @@ var OperationStatusCmd = &cobra.Command{
 
 		if resp, err := Latch.OperationStatus(AccountID, OperationID, NoOTP, Silent); err == nil {
 			Session.AddSuccess("operation is " + resp.Status())
+
+			//Exit code
+			if resp.Status() != golatch.LATCH_STATUS_ON {
+				Session.ExitCode = 1
+			}
+
+			//Two factor
 			TwoFactor := resp.TwoFactor()
 			if TwoFactor.Token != "" {
 				Session.AddInfo("two factor info:\t")

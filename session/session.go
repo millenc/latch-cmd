@@ -10,6 +10,7 @@ import (
 //Stores messages produced during the command run
 type LatchCmdSession struct {
 	Messages []Message
+	ExitCode int
 }
 
 //Message to be printed out
@@ -72,10 +73,17 @@ func (session *LatchCmdSession) Output() {
 //Prints all the messages stored in the session and halts the command execution with the provided error
 func (session *LatchCmdSession) Halt(err error) {
 	session.AddError(err.Error())
-	session.Output()
-	os.Exit(-1)
+	session.ExitCode = -1
+	session.End()
 }
 
+//Outputs all messages and exits with ExitCode
+func (session *LatchCmdSession) End() {
+	session.Output()
+	os.Exit(session.ExitCode)
+}
+
+//Colorize message types
 func (session *LatchCmdSession) FormatMessageType(messageType string) string {
 	switch messageType {
 	case MESSAGE_TYPE_INFO:
