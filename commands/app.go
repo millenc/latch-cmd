@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/millenc/golatch"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"net/http"
 	"net/url"
 	"strings"
@@ -22,6 +23,11 @@ func init() {
 	AppCmd.PersistentFlags().StringVarP(&SecretKey, "secret", "s", "", "Secret key")
 	AppCmd.PersistentFlags().StringVarP(&Proxy, "proxy", "p", "", "Proxy URL")
 	AppCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "Display additional information about what's going on on each call")
+
+	//Bind flags to config
+	viper.BindPFlag("app", AppCmd.PersistentFlags().Lookup("app"))
+	viper.BindPFlag("secret", AppCmd.PersistentFlags().Lookup("secret"))
+	viper.BindPFlag("proxy", AppCmd.PersistentFlags().Lookup("proxy"))
 
 	AppCmd.AddCommand(PairCmd)
 	AppCmd.AddCommand(UnpairCmd)
@@ -45,7 +51,7 @@ var AppCmd = &cobra.Command{
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		//Init latch struct used by subcommands
 		if cmd.Use != "app" && cmd.Use != "operation" {
-			if l, err := NewLatch(AppID, SecretKey, Proxy); err != nil {
+			if l, err := NewLatch(viper.GetString("app"), viper.GetString("secret"), viper.GetString("proxy")); err != nil {
 				Session.Halt(err)
 			} else {
 				Latch = l

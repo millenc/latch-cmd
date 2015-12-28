@@ -3,6 +3,7 @@ package commands
 import (
 	"github.com/millenc/latch-cmd/session"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 //Command session
@@ -28,4 +29,18 @@ func Execute() {
 func AddCommands() {
 	MainCmd.AddCommand(AppCmd)
 	MainCmd.AddCommand(UserCmd)
+}
+
+//Init config
+func init() {
+	//Config
+	viper.SetConfigName("latch")
+	viper.AddConfigPath("/etc/latch/")
+	viper.AddConfigPath("$HOME/.latch")
+	viper.AddConfigPath(".")
+	viper.ReadInConfig()
+
+	//Environment variables
+	viper.SetEnvPrefix("latch")
+	viper.AutomaticEnv()
 }
