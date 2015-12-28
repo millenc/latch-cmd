@@ -29,6 +29,7 @@ func Execute() {
 func AddCommands() {
 	MainCmd.AddCommand(AppCmd)
 	MainCmd.AddCommand(UserCmd)
+	MainCmd.AddCommand(AboutCmd)
 }
 
 //Init config
