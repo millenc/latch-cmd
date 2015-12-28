@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//Main command. Outputs help.
+//About command. Outputs version and authorship information.
 var AboutCmd = &cobra.Command{
 	Use:   "about",
 	Short: "Version and authorship information",
