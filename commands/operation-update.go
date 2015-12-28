@@ -8,7 +8,7 @@ import (
 
 //Flag initialization
 func init() {
-	OperationUpdateCmd.PersistentFlags().StringVarP(&OperationID, "operationid", "o", "", "Operation ID")
+	OperationUpdateCmd.PersistentFlags().StringVarP(&OperationID, "operation", "o", "", "Operation ID")
 	OperationUpdateCmd.PersistentFlags().StringVarP(&Name, "name", "n", "", "Name of the operation")
 	OperationUpdateCmd.PersistentFlags().StringVarP(&TwoFactor, "two-factor", "t", golatch.NOT_SET, "Two Factor Authentication (possible values are MANDATORY,OPT_IN and DISABLED)")
 	OperationUpdateCmd.PersistentFlags().StringVarP(&LockOnRequest, "lock-on-request", "l", golatch.NOT_SET, "Lock On Request (possible values are MANDATORY,OPT_IN and DISABLED)")
@@ -20,11 +20,11 @@ var OperationUpdateCmd = &cobra.Command{
 	Short: "Updates an operation",
 	Run: func(cmd *cobra.Command, args []string) {
 		if OperationID == "" {
-			Session.Halt(errors.New("You must provide the operation's ID (--operationid)."))
+			Session.Halt(errors.New("You must provide the operation's ID (--operation)."))
 		}
 
 		if err := Latch.UpdateOperation(OperationID, Name, TwoFactor, LockOnRequest); err == nil {
-			Session.AddSuccess("Operation was updated successfully!")
+			Session.AddSuccess("operation was updated successfully!")
 		} else {
 			Session.Halt(err)
 		}

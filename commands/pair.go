@@ -23,7 +23,7 @@ var PairCmd = &cobra.Command{
 		}
 
 		if resp, err := Latch.Pair(Token); err == nil {
-			Session.AddSuccess("Pairing done! Account ID is " + resp.AccountId())
+			Session.AddSuccess("pairing done! Account ID is " + resp.AccountId())
 		} else {
 			Session.Halt(err)
 		}

@@ -7,20 +7,20 @@ import (
 
 //Flag initialization
 func init() {
-	UnpairCmd.PersistentFlags().StringVarP(&AccountID, "accountid", "i", "", "Account ID")
+	UnpairCmd.PersistentFlags().StringVarP(&AccountID, "account", "i", "", "Account ID")
 }
 
 //Unpair command
 var UnpairCmd = &cobra.Command{
 	Use:   "unpair",
-	Short: "Unpairs an account using it's account ID (--accountid).",
+	Short: "Unpairs an account using it's account ID (--account).",
 	Run: func(cmd *cobra.Command, args []string) {
 		if AccountID == "" {
-			Session.Halt(errors.New("You must provide an Account ID (--accountid)."))
+			Session.Halt(errors.New("You must provide an Account ID (--account)."))
 		}
 
 		if err := Latch.Unpair(AccountID); err == nil {
-			Session.AddSuccess("Unpair done!")
+			Session.AddSuccess("unpair done!")
 		} else {
 			Session.Halt(err)
 		}

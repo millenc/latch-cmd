@@ -17,7 +17,7 @@ var To string
 
 //Flag initialization
 func init() {
-	HistoryCmd.PersistentFlags().StringVarP(&AccountID, "accountid", "i", "", "Account ID")
+	HistoryCmd.PersistentFlags().StringVarP(&AccountID, "account", "i", "", "Account ID")
 	HistoryCmd.PersistentFlags().StringVarP(&From, "from", "f", "", "From (date)")
 	HistoryCmd.PersistentFlags().StringVarP(&To, "to", "t", "", "To (date)")
 }
@@ -31,7 +31,7 @@ var HistoryCmd = &cobra.Command{
 		var err error
 
 		if AccountID == "" {
-			Session.Halt(errors.New("You must provide an Account ID (--accountid)."))
+			Session.Halt(errors.New("You must provide an Account ID (--account)."))
 		}
 
 		if FromDate, err = ParseCmdDate(From); err != nil {

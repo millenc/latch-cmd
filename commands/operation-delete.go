@@ -7,7 +7,7 @@ import (
 
 //Flag initialization
 func init() {
-	OperationDeleteCmd.PersistentFlags().StringVarP(&OperationID, "operationid", "o", "", "Operation ID")
+	OperationDeleteCmd.PersistentFlags().StringVarP(&OperationID, "operation", "o", "", "Operation ID")
 }
 
 //Delete operation command
@@ -16,11 +16,11 @@ var OperationDeleteCmd = &cobra.Command{
 	Short: "Deletes an operation",
 	Run: func(cmd *cobra.Command, args []string) {
 		if OperationID == "" {
-			Session.Halt(errors.New("You must provide the operation's ID (--operationid)."))
+			Session.Halt(errors.New("You must provide the operation's ID (--operation)."))
 		}
 
 		if err := Latch.DeleteOperation(OperationID); err == nil {
-			Session.AddSuccess("Operation was deleted!")
+			Session.AddSuccess("operation was deleted!")
 		} else {
 			Session.Halt(err)
 		}

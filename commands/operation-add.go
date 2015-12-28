@@ -14,7 +14,7 @@ var LockOnRequest string
 
 //Flag initialization
 func init() {
-	OperationAddCmd.PersistentFlags().StringVarP(&ParentID, "parent", "p", "", "Parent ID (must be an existing operation or application)")
+	OperationAddCmd.PersistentFlags().StringVarP(&ParentID, "parent", "i", "", "Parent ID (must be an existing operation or application)")
 	OperationAddCmd.PersistentFlags().StringVarP(&Name, "name", "n", "", "Name of the operation")
 	OperationAddCmd.PersistentFlags().StringVarP(&TwoFactor, "two-factor", "t", golatch.DISABLED, "Two Factor Authentication (possible values are MANDATORY,OPT_IN and DISABLED)")
 	OperationAddCmd.PersistentFlags().StringVarP(&LockOnRequest, "lock-on-request", "l", golatch.DISABLED, "Lock On Request (possible values are MANDATORY,OPT_IN and DISABLED)")
@@ -33,7 +33,7 @@ var OperationAddCmd = &cobra.Command{
 		}
 
 		if resp, err := Latch.AddOperation(ParentID, Name, TwoFactor, LockOnRequest); err == nil {
-			Session.AddSuccess("Operation created with ID: " + resp.OperationId())
+			Session.AddSuccess("operation created with ID: " + resp.OperationId())
 		} else {
 			Session.Halt(err)
 		}
