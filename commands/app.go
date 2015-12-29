@@ -16,6 +16,7 @@ var AppID string
 var SecretKey string
 var Proxy string
 var Verbose bool
+var NoShadow bool
 var Bare bool
 
 //Flag & commands initialization
@@ -24,6 +25,7 @@ func init() {
 	AppCmd.PersistentFlags().StringVarP(&SecretKey, "secret", "s", "", "Secret key")
 	AppCmd.PersistentFlags().StringVarP(&Proxy, "proxy", "p", "", "Proxy URL")
 	AppCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "Display additional information about what's going on on each call")
+	AppCmd.PersistentFlags().BoolVarP(&NoShadow, "no-shadow", "w", false, "Don't hide secret keys")
 
 	//Bind flags to config
 	viper.BindPFlag("app", AppCmd.PersistentFlags().Lookup("app"))
@@ -93,6 +95,9 @@ func NewLatch(AppID string, SecretKey string, Proxy string) (latch *golatch.Latc
 
 //Prints request information
 func OnLatchRequestStart(request *golatch.LatchRequest) {
+	Session.AddInfo("latch:\t")
+	Session.AddInfo("app/user\t" + request.AppID)
+	Session.AddInfo("secret\t" + FormatSecret(request.SecretKey, NoShadow) + "\n\t\t")
 	Session.AddInfo("request:\t")
 	Session.AddInfo("url\t" + request.URL.String())
 	Session.AddInfo("http-method\t" + request.HttpMethod)
@@ -109,4 +114,13 @@ func OnLatchResponseReceive(request *golatch.LatchRequest, response *http.Respon
 	Session.AddInfo("response:\t")
 	Session.AddInfo(fmt.Sprintf("http-status\t%d", response.StatusCode))
 	Session.AddInfo("body\t" + responseBody + "\n\t\t")
+}
+
+//Replaces all characters with '*' if NoShadow is false
+func FormatSecret(secret string, NoShadow bool) string {
+	if NoShadow {
+		return secret
+	} else {
+		return strings.Repeat("*", len(secret))
+	}
 }

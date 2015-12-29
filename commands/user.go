@@ -17,6 +17,7 @@ func init() {
 	UserCmd.PersistentFlags().StringVarP(&SecretKey, "secret", "s", "", "User secret key")
 	UserCmd.PersistentFlags().StringVarP(&Proxy, "proxy", "p", "", "Proxy URL")
 	UserCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "Display additional information about what's going on on each call")
+	UserCmd.PersistentFlags().BoolVarP(&NoShadow, "no-shadow", "w", false, "Don't hide secret keys")
 
 	//Bind flags to config
 	viper.BindPFlag("user", UserCmd.PersistentFlags().Lookup("user"))

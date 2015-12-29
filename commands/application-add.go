@@ -44,7 +44,7 @@ var ApplicationAddCmd = &cobra.Command{
 			} else {
 				Session.AddSuccess("application succesfully created!:\t")
 				Session.AddInfo("app id\t" + resp.AppID())
-				Session.AddInfo("secret key\t" + resp.Secret())
+				Session.AddInfo("secret key\t" + FormatSecret(resp.Secret(), NoShadow))
 			}
 		} else {
 			Session.Halt(err)
