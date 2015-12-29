@@ -36,9 +36,9 @@ func AddCommands() {
 func init() {
 	//Config
 	viper.SetConfigName("latch-cmd")
-	viper.AddConfigPath("/etc/latch-cmd/")
-	viper.AddConfigPath("$HOME/.latch-cmd")
 	viper.AddConfigPath(".")
+	viper.AddConfigPath("$HOME/.latch-cmd")
+	viper.AddConfigPath("/etc/latch-cmd/")
 	viper.ReadInConfig()
 
 	//Environment variables
