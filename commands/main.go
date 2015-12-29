@@ -12,8 +12,8 @@ var Session *session.LatchCmdSession = &session.LatchCmdSession{}
 //Main command. Outputs help.
 var MainCmd = &cobra.Command{
 	Use:   "latch-cmd",
-	Short: "Latch-cmd is an unofficial command line tool to interact with the Latch API (https://latch.elevenpaths.com/)",
-	Long:  `A simple command line tool to interact with the Latch API. This tool can be used to test and debug the Latch API.`,
+	Short: "Latch-cmd is an unofficial command line tool that lets you interact with the Latch API (https://latch.elevenpaths.com/).",
+	Long:  `Latch-cmd is an unofficial command line tool that lets you interact with the Latch API (https://latch.elevenpaths.com/).`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
@@ -35,9 +35,9 @@ func AddCommands() {
 //Init config
 func init() {
 	//Config
-	viper.SetConfigName("latch")
-	viper.AddConfigPath("/etc/latch/")
-	viper.AddConfigPath("$HOME/.latch")
+	viper.SetConfigName("latch-cmd")
+	viper.AddConfigPath("/etc/latch-cmd/")
+	viper.AddConfigPath("$HOME/.latch-cmd")
 	viper.AddConfigPath(".")
 	viper.ReadInConfig()
 
