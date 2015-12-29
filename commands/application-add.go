@@ -2,6 +2,7 @@ package commands
 
 import (
 	"errors"
+	"fmt"
 	"github.com/millenc/golatch"
 	"github.com/spf13/cobra"
 )
@@ -17,6 +18,7 @@ func init() {
 	ApplicationAddCmd.PersistentFlags().StringVarP(&ContactPhone, "phone", "c", "", "Contact phone")
 	ApplicationAddCmd.PersistentFlags().StringVarP(&TwoFactor, "two-factor", "t", golatch.DISABLED, "Two Factor Authentication (possible values are MANDATORY,OPT_IN and DISABLED)")
 	ApplicationAddCmd.PersistentFlags().StringVarP(&LockOnRequest, "lock-on-request", "l", golatch.DISABLED, "Lock On Request (possible values are MANDATORY,OPT_IN and DISABLED)")
+	ApplicationAddCmd.PersistentFlags().BoolVarP(&Bare, "bare", "b", false, "Bare output (print only essential information, useful when handling the results in shell scripts for example)")
 }
 
 //Add application command
@@ -37,9 +39,13 @@ var ApplicationAddCmd = &cobra.Command{
 		}
 
 		if resp, err := LatchUser.AddApplication(applicationInfo); err == nil {
-			Session.AddSuccess("application succesfully created!:\t")
-			Session.AddInfo("app id\t" + resp.AppID())
-			Session.AddInfo("secret key\t" + resp.Secret())
+			if Bare {
+				Session.OutputAndExit(fmt.Sprintf("%s:%s", resp.AppID(), resp.Secret()))
+			} else {
+				Session.AddSuccess("application succesfully created!:\t")
+				Session.AddInfo("app id\t" + resp.AppID())
+				Session.AddInfo("secret key\t" + resp.Secret())
+			}
 		} else {
 			Session.Halt(err)
 		}

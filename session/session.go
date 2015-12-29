@@ -70,6 +70,12 @@ func (session *LatchCmdSession) Output() {
 	w.Flush()
 }
 
+//Outputs a message and exits (useful to output bare information returned by the API)
+func (session *LatchCmdSession) OutputAndExit(output string) {
+	fmt.Print(output)
+	os.Exit(session.ExitCode)
+}
+
 //Prints all the messages stored in the session and halts the command execution with the provided error
 func (session *LatchCmdSession) Halt(err error) {
 	session.AddError(err.Error())

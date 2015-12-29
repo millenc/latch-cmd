@@ -18,6 +18,7 @@ func init() {
 	OperationAddCmd.PersistentFlags().StringVarP(&Name, "name", "n", "", "Name of the operation")
 	OperationAddCmd.PersistentFlags().StringVarP(&TwoFactor, "two-factor", "t", golatch.DISABLED, "Two Factor Authentication (possible values are MANDATORY,OPT_IN and DISABLED)")
 	OperationAddCmd.PersistentFlags().StringVarP(&LockOnRequest, "lock-on-request", "l", golatch.DISABLED, "Lock On Request (possible values are MANDATORY,OPT_IN and DISABLED)")
+	OperationAddCmd.PersistentFlags().BoolVarP(&Bare, "bare", "b", false, "Bare output (print only essential information, useful when handling the results in shell scripts for example)")
 }
 
 //Add operation command
@@ -33,7 +34,11 @@ var OperationAddCmd = &cobra.Command{
 		}
 
 		if resp, err := Latch.AddOperation(ParentID, Name, TwoFactor, LockOnRequest); err == nil {
-			Session.AddSuccess("operation created with ID: " + resp.OperationId())
+			if Bare {
+				Session.OutputAndExit(resp.OperationId())
+			} else {
+				Session.AddSuccess("operation created with ID: " + resp.OperationId())
+			}
 		} else {
 			Session.Halt(err)
 		}

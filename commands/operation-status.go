@@ -17,6 +17,7 @@ func init() {
 	OperationStatusCmd.PersistentFlags().StringVarP(&OperationID, "operation", "o", "", "Operation ID")
 	OperationStatusCmd.PersistentFlags().BoolVarP(&NoOTP, "nootp", "n", false, "No OTP")
 	OperationStatusCmd.PersistentFlags().BoolVarP(&Silent, "silent", "l", false, "Silent (requires SILVER, GOLD or PLATINUM subscription)")
+	OperationStatusCmd.PersistentFlags().BoolVarP(&Bare, "bare", "b", false, "Bare output (print only essential information, useful when handling the results in shell scripts for example)")
 }
 
 //Status command
@@ -32,19 +33,33 @@ var OperationStatusCmd = &cobra.Command{
 		}
 
 		if resp, err := Latch.OperationStatus(AccountID, OperationID, NoOTP, Silent); err == nil {
-			Session.AddSuccess("operation is " + resp.Status())
-
 			//Exit code
 			if resp.Status() != golatch.LATCH_STATUS_ON {
 				Session.ExitCode = 1
 			}
 
+			//Output
+			var bareOutput string
+			if Bare {
+				bareOutput += resp.Status()
+			} else {
+				Session.AddSuccess("operation is " + resp.Status())
+			}
+
 			//Two factor
 			TwoFactor := resp.TwoFactor()
 			if TwoFactor.Token != "" {
-				Session.AddInfo("two factor info:\t")
-				Session.AddInfo("token\t" + TwoFactor.Token)
-				Session.AddInfo(fmt.Sprintf("generated\t%d (%s)", TwoFactor.Generated, time.Unix(TwoFactor.Generated/1000, 0)))
+				if Bare {
+					bareOutput += fmt.Sprintf(":%s:%d", TwoFactor.Token, TwoFactor.Generated)
+				} else {
+					Session.AddInfo("two factor info:\t")
+					Session.AddInfo("token\t" + TwoFactor.Token)
+					Session.AddInfo(fmt.Sprintf("generated\t%d (%s)", TwoFactor.Generated, time.Unix(TwoFactor.Generated/1000, 0)))
+				}
+			}
+
+			if Bare {
+				Session.OutputAndExit(bareOutput)
 			}
 		} else {
 			Session.Halt(err)

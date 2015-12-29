@@ -11,6 +11,7 @@ var Token string
 //Flag initialization
 func init() {
 	PairCmd.PersistentFlags().StringVarP(&Token, "token", "t", "", "Token provided by the user to perform the pairing")
+	PairCmd.PersistentFlags().BoolVarP(&Bare, "bare", "b", false, "Bare output (print only essential information, useful when handling the results in shell scripts for example)")
 }
 
 //Pair command
@@ -23,7 +24,11 @@ var PairCmd = &cobra.Command{
 		}
 
 		if resp, err := Latch.Pair(Token); err == nil {
-			Session.AddSuccess("pairing done! Account ID is " + resp.AccountId())
+			if Bare {
+				Session.OutputAndExit(resp.AccountId())
+			} else {
+				Session.AddSuccess("pairing done! Account ID is " + resp.AccountId())
+			}
 		} else {
 			Session.Halt(err)
 		}

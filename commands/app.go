@@ -16,6 +16,7 @@ var AppID string
 var SecretKey string
 var Proxy string
 var Verbose bool
+var Bare bool
 
 //Flag & commands initialization
 func init() {
