@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"github.com/millenc/latch-cmd/util"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +17,7 @@ var ApplicationShowCmd = &cobra.Command{
 				Session.AddInfo(fmt.Sprintf("application #%d:", i))
 				Session.AddInfo("name\t" + applicationInfo.Name)
 				Session.AddInfo("id\t" + applicationId)
-				Session.AddInfo("secret key\t" + FormatSecret(applicationInfo.Secret, NoShadow))
+				Session.AddInfo("secret key\t" + util.FormatSecret(applicationInfo.Secret, NoShadow))
 				Session.AddInfo("two factor\t" + applicationInfo.TwoFactor)
 				Session.AddInfo("lock on request\t" + applicationInfo.LockOnRequest)
 				Session.AddInfo("phone\t" + applicationInfo.ContactPhone)

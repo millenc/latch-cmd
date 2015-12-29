@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/millenc/golatch"
+	"github.com/millenc/latch-cmd/util"
 	"github.com/spf13/cobra"
 )
 
@@ -44,7 +45,7 @@ var ApplicationAddCmd = &cobra.Command{
 			} else {
 				Session.AddSuccess("application succesfully created!:\t")
 				Session.AddInfo("app id\t" + resp.AppID())
-				Session.AddInfo("secret key\t" + FormatSecret(resp.Secret(), NoShadow))
+				Session.AddInfo("secret key\t" + util.FormatSecret(resp.Secret(), NoShadow))
 			}
 		} else {
 			Session.Halt(err)

@@ -4,10 +4,9 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/millenc/golatch"
+	"github.com/millenc/latch-cmd/util"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
-	"strings"
 	t "time"
 )
 
@@ -34,10 +33,10 @@ var HistoryCmd = &cobra.Command{
 			Session.Halt(errors.New("You must provide an Account ID (--account)."))
 		}
 
-		if FromDate, err = ParseCmdDate(From); err != nil {
+		if FromDate, err = util.ParseCmdDate(From); err != nil {
 			Session.Halt(errors.New("The 'from' date has an incorrect format (please use dd-mm-yyyy hh:ii:ss)"))
 		}
-		if ToDate, err = ParseCmdDate(To); err != nil {
+		if ToDate, err = util.ParseCmdDate(To); err != nil {
 			Session.Halt(errors.New("The 'to' date has an incorrect format (please use dd-mm-yyyy hh:ii:ss)"))
 		}
 
@@ -55,7 +54,7 @@ var HistoryCmd = &cobra.Command{
 			//Generate output
 			var output string
 			output += "Last seen: " + t.Unix(0, resp.LastSeen()*1000000).Format("02-01-2006 15:04:05") + ", "
-			output += "Client version: [" + FormatClientVersions(resp.ClientVersion()) + "], "
+			output += "Client version: [" + util.FormatClientVersions(resp.ClientVersion()) + "], "
 			output += "History count: " + fmt.Sprintf("%d", resp.HistoryCount()) + "\n\n"
 			output += buffer.String()
 			Session.AddSuccess(output)
@@ -63,25 +62,4 @@ var HistoryCmd = &cobra.Command{
 			Session.Halt(err)
 		}
 	},
-}
-
-//Parses a date received from the command line
-func ParseCmdDate(date string) (parsed t.Time, err error) {
-	if date == "" {
-		return t.Time{}, nil
-	}
-
-	parsed, err = t.Parse("02-01-2006 15:04:05", date)
-
-	return parsed, err
-}
-
-//Formats the client versions received from the API
-func FormatClientVersions(clientVersions []golatch.LatchClientVersion) (formatted string) {
-	versions := []string{}
-	for _, version := range clientVersions {
-		versions = append(versions, version.Platform+" - "+version.App)
-	}
-
-	return strings.Join(versions, ",")
 }

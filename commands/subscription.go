@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"fmt"
+	"github.com/millenc/latch-cmd/util"
 	"github.com/spf13/cobra"
 )
 
@@ -13,18 +13,14 @@ var SubscriptionCmd = &cobra.Command{
 		if resp, err := LatchUser.Subscription(); err == nil {
 			Session.AddInfo("subscription info:\t")
 			Session.AddInfo("id\t" + resp.ID())
-			Session.AddInfo("applications\t" + formatUsageString(resp.Applications().InUse, resp.Applications().Limit))
-			Session.AddInfo("users\t" + formatUsageString(resp.Users().InUse, resp.Users().Limit))
+			Session.AddInfo("applications\t" + util.FormatUsageString(resp.Applications().InUse, resp.Applications().Limit))
+			Session.AddInfo("users\t" + util.FormatUsageString(resp.Users().InUse, resp.Users().Limit))
 			Session.AddInfo("operations:\t")
 			for name, usage := range resp.Operations() {
-				Session.AddInfo(name + "\t" + formatUsageString(usage.InUse, usage.Limit))
+				Session.AddInfo(name + "\t" + util.FormatUsageString(usage.InUse, usage.Limit))
 			}
 		} else {
 			Session.Halt(err)
 		}
 	},
-}
-
-func formatUsageString(inUse int, limit int) string {
-	return fmt.Sprintf("in use: %d, limit: %d", inUse, limit)
 }
