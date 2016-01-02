@@ -4,7 +4,7 @@
 
 ##Installation & Building
 
-The easiest way to install `latch-cmd` on your system is to download one of the precompiled binaries that match your operating system and architecture:
+The easiest way to install *latch-cmd* on your system is to download one of the precompiled binaries that match your operating system and architecture:
 
 * Windows: 32 bits / 64 bits
 * Mac OS X: 32 bits / 64 bits
@@ -55,7 +55,7 @@ $ cd $GOPATH/src/github.com/millenc/latch-cmd
 ``` bash
 $ go build
 ```
-That's it! Go will compile the source code into one single executable file named `latch-cmd` (or `latch-cmd.exe` on Windows).
+That's it! Go will compile the source code into one single executable file named *latch-cmd* (or `latch-cmd.exe` on Windows).
 
 ##Getting help
 
@@ -90,9 +90,9 @@ Global Flags:
 
 ##Configuration
 
-You don't need any configuration to start using `latch-cmd`, but there is some information that you have to provide to every command through flags like the Application ID (`--app`) and the Secret key (`--secret`) for the `app` subcommands for example. 
+You don't need any configuration to start using *latch-cmd*, but there is some information that you have to provide to every command through flags like the Application ID (`--app`) and the Secret key (`--secret`) for the `app` subcommands for example. 
 
-Typing this flags over and over can be very cumbersome. That's the reason why `latch-cmd` supports the concept of "12 factor" configuration, that lets you provide these values through flags, config files or environment values (or a combination of all of them). The values that can be configured are the following:
+Typing this flags over and over can be very cumbersome. That's the reason why *latch-cmd* supports the concept of "12 factor" configuration, that lets you provide these values through flags, config files or environment values (or a combination of all of them). The values that can be configured are the following:
 
 | Parameter  	  | Flag 			| Configuration		| Environment variable		|
 | --------------- | --------------- | ----------------- | ------------------------- |
@@ -102,26 +102,26 @@ Typing this flags over and over can be very cumbersome. That's the reason why `l
 | User ID		  | --user (-u)		| user				| LATCH_USER				|
 | User Secret key | --secret (-s)	| user_secret		| LATCH_USER_SECRET			|
 
-When looking for these values, `latch-cmd` uses the following priority order (from highest to lowest):
+When looking for these values, *latch-cmd* uses the following priority order (from highest to lowest):
 
 * Flags: passed to the command like `--app` or `--secret`.
 * Environment variables: always in uppercase and prefixed by the LATCH keyword like `LATCH_APP` or `LATCH_SECRET`.
-* Configuration files: `latch-cmd` will look for configuration files named `latch-cmd` (plus extension) in the following folders (also from highest to lowest priority):
+* Configuration files: *latch-cmd* will look for configuration files named `latch-cmd` (plus extension) in the following folders (also from highest to lowest priority):
 	* Current working directory (`.`).
 	* `.latch-cmd` folder inside user's home directory (`$HOME/.latch-cmd`).
 	* `/etc/latch-cmd` only in UNIX-like systems.
 
 This means that, for example, if you have provided the Application ID through an environment variable and you also have it defined in a configuration file, the value from the environment variable will be used. When using configuration files, keep in mind that the first configuration file found will be used (following the priority order previously defined).
 
-`latch-cmd` supports reading configuration files in the TOML (recommended), JSON, YAML and HCL formats. You must name the config file `latch-cmd` with the proper extension (`latch-cmd.toml` for TOML, `latch-cmd.json` for JSON and so on). Here's an example of one such file using the TOML format:
+*latch-cmd* supports reading configuration files in the TOML (recommended), JSON, YAML and HCL formats. You must name the config file `latch-cmd` with the proper extension (`latch-cmd.toml` for TOML, `latch-cmd.json` for JSON and so on). Here's an example of one such file using the TOML format:
 
 ```toml
 ###################################################
-#												  #
-# latch-cmd.toml								  #
-# latch-cmd configuration (TOML)				  #
+#                                                 #
+# latch-cmd.toml                                  #
+# latch-cmd configuration (TOML)                  #
 # you can use the `#` character to write comments #
-#												  #
+#                                                 #
 ###################################################
 
 #Application ID
@@ -139,4 +139,222 @@ user_secret="veRY4LZ7qKVwMgZWriFDgxPvWg7mrPskvYQWA7xm"
 #Proxy
 proxy="http://8.8.8.8:8080"
 ```
+
+##Usage
+
+###Return values
+
+Except where noted, *latch-cmd* will return a `0` exit code if the command completes successfully or `-1` if there's any error.
+
+###Application API (`app`)
+
+You can issue the command:
+
+```bash
+$ latch-cmd app
+```
+
+to get a list of all the available subcommands to interact with Latch's main application API:
+
+```bash
+Set of commands to interact with the main application API.
+
+Usage:
+  latch-cmd app [flags]
+  latch-cmd app [command]
+
+Available Commands:
+  pair        Pairs an account with the provided pairing token (--token).
+  unpair      Unpairs an account using it's account ID (--account).
+  status      Gets the current status of an account using it's account ID (--account).
+  lock        Locks an account using it's account ID (--account).
+  unlock      Unlocks an account using it's account ID (--account).
+  operation   Manages Latch operations
+  history     Gets history information about an account. You can filter events between the --from and --to dates.
+
+Flags:
+  -a, --app string      Application's ID
+  -h, --help            help for app
+  -w, --no-shadow       Don't hide secret keys
+  -p, --proxy string    Proxy URL
+  -s, --secret string   Secret key
+  -v, --verbose         Display additional information about what's going on on each call
+
+Use "latch-cmd app [command] --help" for more information about a command.
+```
+
+####Global flags
+
+You can pass these flags to every subcommand of the `app` command (and some of them can be provided via configuration, see the appropriate section of this documentation):
+
+* `--app` (`-a`): Application ID (mandatory).
+* `--secret` (`-s`): Secret key (mandatory).
+* `--proxy` (`-p`): URL of the proxy.
+* `--verbose` (`-v`): Prints additional information about what's going on on each call.
+* `--no-shadow` (`-w`): Don't hide secret keys.
+
+####Pair (`app pair`)
+
+Command to pair an account with a given token (`--token`, `-t`):
+
+```bash
+$ latch-cmd app pair --app=YourAppID --secret=YourSecretKey --token=YourPairingToken
+```
+
+If the pairing goes well, *latch-cmd* will print the newly created Account ID. You can use the `--bare` (`-b`) flag to get *latch-cmd* to print only this account ID, thus making it easier to get that value from shell scripts or other programs.
+
+NOTE: From now on we will omit the `--app` and `--secret` flags from the examples for the sake of clarity (it's recommended to create a configuration file/use environment variables instead of passing these flags over and over).
+
+####Unpair (`app unpair`)
+
+Command to unpair an account, given it's Account ID (`--account`, `-i`):
+
+```bash
+$ latch-cmd app unpair --account=AccountIDYouWantToUnpair
+```
+
+####Status (`app status`)
+
+Command to get the status of an account, given it's Account ID (`--account`, `-i`):
+
+```bash
+$ latch-cmd app status --account=YourAccountID
+```
+This command will return the following exit codes:
+
+* `0`: Account is ON.
+* `1`: Account is OFF.
+* `-1`: Error.
+
+You can also pass the following optional flags:
+
+* `--nootp` (`-n`): No OTP, don't include the 1-time password in the response.
+* `--silent` (`-l`): Silent, don't alert the user of the access.
+* `--bare` (`-b`): Bare, prints bare information. With this flag, *latch-cmd* will print `on` if the account is ON or `off` if the account is OFF. If you don't pass the `--no-otp` flag it will also print the 1-time password and the generated time (unix epoch in ms) separated by the `:` character in the following format `[status]:[1-time password]:[generated time]`. This makes it really easy to parse these values in calling shell scripts or programs.
+
+####Lock (`app lock`)
+
+Command to lock an account using it's account ID (`--account`, `-i`). Requires a a GOLD or PLATINUM subscription in order to work:
+
+```bash
+$ latch-cmd app lock --account=YourAccountID
+```
+
+####Unlock (`app unlock`)
+
+Command to unlock an account using it's account ID (`--account`, `-i`). Requires a a GOLD or PLATINUM subscription in order to work:
+
+```bash
+$ latch-cmd app unlock --account=YourAccountID
+```
+
+####Operation (`app operation`)
+
+Set of command to manage operations. Prints usage information about the available subcommands (described in the following sections).
+
+####Operation status (`app operation status`)
+
+Command to get the status of an operation, given an Account ID (`--account`, `-i`) and an Operation ID (`--operation`, `-o`):
+
+```bash
+$ latch-cmd app operation status --account=YourAccountID --operation=YourOperationID
+```
+
+This command accepts the same flags and displays information in the same way as the `app status` command.
+
+####Lock Operation (`app operation lock`)
+
+Command to lock an operation, given an Account ID (`--account`, `-i`) and an Operation ID (`--operation`, `-o`):
+
+```bash
+$ latch-cmd app operation lock --account=YourAccountID --operation=YourOperationID
+```
+
+####Unlock Operation (`app operation unlock`)
+
+Command to unlock an operation, given an Account ID (`--account`, `-i`) and an Operation ID (`--operation`, `-o`):
+
+```bash
+$ latch-cmd app operation unlock --account=YourAccountID --operation=YourOperationID
+```
+
+####Add Operation (`app operation add`)
+
+Command to add a new operation. You must provide the parent's application or operation ID (`--parent`, `-i`) and a name for the operation (`--name`, `-n`):
+
+```bash
+$ latch-cmd app operation add --parent=ParentID --name=MyNewOperationName
+```
+
+If everything goes well, *latch-cmd* will print the ID of the newly created operation. You can also pass these optional flags:
+
+* `--two-factor`, (`-t`): Configures the two-factor authentication setting. Possible values are MANDATORY, OPT_IN and DISABLED (default).
+* `--lock-on-request`, (`-l`): Configures the lock on request setting. Possible values are MANDATORY, OPT_IN and DISABLED (default).
+* `--bare`, (`-b`): Bare output, displays only the newly created operation's ID.
+
+####Update Operation (`app operation update`)
+
+Command to modify an existing operation. You must provide the operation's ID (`--operation`, `-o`):
+
+```bash
+$ latch-cmd app operation update --operation=YourOperationID
+```
+
+The values you can modify are:
+
+* `--name`, (`-n`): Name of the operation.
+* `--two-factor`, (`-t`): Configures the two-factor authentication setting. Possible values are MANDATORY, OPT_IN and DISABLED.
+* `--lock-on-request`, (`-l`): Configures the lock on request setting. Possible values are MANDATORY, OPT_IN and DISABLED.
+
+If you don't provide any of these flags they will keep their original values.
+
+####Delete Operation (`app operation delete`)
+
+Command to delete an existing operation, given it's Operation ID (`--operation`, `-o`):
+
+```bash
+$ latch-cmd app operation delete --operation=YourOperationID
+```
+
+####Show Operation (`app operation show`)
+
+Command to get information about an operation, given it's Operation ID (`--operation`, `-o`):
+
+```bash
+$ latch-cmd app operation show --operation=YourOperationID
+```
+####History (`app history`)
+
+Command to get history information about an account (`--account`, `-i`). You can use the flags `--from` (`-f`) and `--to` (`-t`) to filter events between those dates.For example, to get all the events that happened in the year 2015 you could do:
+
+```bash
+$ latch-cmd app history --account=YourAccountID --from="01-01-2015 00:00:00" --to="31-12-2015 23:59:59"
+```
+
+*latch-cmd* will show a table with the events. For example:
+
+```
+success  Last seen: 02-01-2016 13:36:58, Client version: [Android - 1.5.1,Android - 1.5.1], History count: 15
+
++---------------------+------------------+------------+-----+-------+------------------+-------------+-----------+
+|        TIME         |      ACTION      |    WHAT    | WAS | VALUE |       NAME       | USER AGENT  |    IP     |
++---------------------+------------------+------------+-----+-------+------------------+-------------+-----------+
+| 28-12-2015 12:18:56 | USER_UPDATE      | two_factor |     | on    | Test Application |             | 127.0.0.1 |
+| 28-12-2015 12:19:41 | get              | status     | -   | on    | Test Application | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:20:41 | get              | status     | -   | on    | Test Application | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:27:38 | get              | status     | -   | on    | Test Application | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:27:56 | get              | status     | -   | on    | Test Application | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:35:19 | USER_UPDATE      | two_factor |     | on    | Test Application |             | 127.0.0.1 |
+| 28-12-2015 12:36:14 | get              | status     | -   | on    | Test Application | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:36:33 | get              | status     | -   | on    | Test operation 1 | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:36:33 | DEVELOPER_UPDATE | status     |     | off   | Test operation 1 | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:37:21 | get              | status     | -   | off   | Test operation 1 | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:37:30 | USER_UPDATE      | status     | off | on    | Test operation 1 |             | 127.0.0.1 |
+| 28-12-2015 12:37:39 | get              | status     | -   | on    | Test operation 1 | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:37:39 | DEVELOPER_UPDATE | status     | on  | off   | Test operation 1 | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:38:04 | get              | status     | -   | off   | Test operation 1 | Golatch 1.0 | 127.0.0.1 |
+| 28-12-2015 12:40:29 | get              | status     | -   | off   | Test operation 1 | Golatch 1.0 | 127.0.0.1 |
++---------------------+------------------+------------+-----+-------+------------------+-------------+-----------+
+```
+
 
