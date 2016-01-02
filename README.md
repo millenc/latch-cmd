@@ -357,4 +357,139 @@ success  Last seen: 02-01-2016 13:36:58, Client version: [Android - 1.5.1,Androi
 +---------------------+------------------+------------+-----+-------+------------------+-------------+-----------+
 ```
 
+###User API (`user`)
 
+You can issue the command:
+
+```bash
+$ latch-cmd user
+```
+
+to get a list of all the available subcommands to interact with Latch's User API:
+
+```bash
+Set of commands to interact with the user API (manage applications and subscription information).
+
+Usage:
+  latch-cmd user [flags]
+  latch-cmd user [command]
+
+Available Commands:
+  subscription Gets information about your current subscription.
+  application  Manages Latch applications
+
+Flags:
+  -h, --help            help for user
+  -w, --no-shadow       Don't hide secret keys
+  -p, --proxy string    Proxy URL
+  -s, --secret string   User secret key
+  -u, --user string     User ID
+  -v, --verbose         Display additional information about what's going on on each call
+
+Use "latch-cmd user [command] --help" for more information about a command.
+```
+
+Please keep in mind that all these commands require a GOLD or PLATINUM subscription in order to work.
+
+####Global flags
+
+You can pass these flags to every subcommand of the `user` command (and some of them can be provided via configuration, see the appropriate section of this documentation):
+
+* `--user` (`-u`): User ID (mandatory).
+* `--secret` (`-s`): User Secret key (mandatory).
+* `--proxy` (`-p`): URL of the proxy.
+* `--verbose` (`-v`): Prints additional information about what's going on on each call.
+* `--no-shadow` (`-w`): Don't hide secret keys.
+
+####Subscription (`user subscription`)
+
+Command to get information about your current subscription:
+
+```batch
+$ latch-cmd user subscription
+```
+
+####Applications (`user application`)
+
+Set of commands to manage (create, update, delete,show) applications. Prints usage information about the available subcommands (described in the following sections):
+
+```bash
+$ latch-cmd user application
+```
+
+```bash
+Manages Latch applications
+
+Usage:
+  latch-cmd user application [flags]
+  latch-cmd user application [command]
+
+Available Commands:
+  add         Adds a new application
+  update      Updates an existing application
+  delete      Deletes an existing application
+  show        Shows information about your applications
+
+Flags:
+  -h, --help   help for application
+
+Global Flags:
+  -w, --no-shadow       Don't hide secret keys
+  -p, --proxy string    Proxy URL
+  -s, --secret string   User secret key
+  -u, --user string     User ID
+  -v, --verbose         Display additional information about what's going on on each call
+
+Use "latch-cmd user application [command] --help" for more information about a command.
+```
+
+####Add Application (`user application add`)
+
+Command to create a new application. You must provide the name of the application through the `--name` (`-n`) flag:
+
+```bash
+$ latch-cmd user application add --name=MyNewApplication
+```
+
+If everything goes well, *latch-cmd* will create the new application and display the Application's ID and Secret Key (hidden by default, use the `--no-shadow` flag to see it). You can also use the `--bare` (`-b`) flag to display only the Application ID and Secret key separated by the `:` character (`[Application ID]:[Secret key]). This can be useful to process this values in calling shell scripts or programs.
+
+You can also provide additional information using these optional flags:
+
+* `--email` (`-e`): Contact email.
+* `--phone` (`-c`): Contact phone.
+* `--two-factor`, (`-t`): Configures the two-factor authentication setting. Possible values are MANDATORY, OPT_IN and DISABLED.
+* `--lock-on-request`, (`-l`): Configures the lock on request setting. Possible values are MANDATORY, OPT_IN and DISABLED.
+
+####Update Application (`user application update`)
+
+Command to update an existing application. You must provide the Application's ID (`--app`, `-a`):
+
+```bash
+$ latch-cmd user application update --app=MyApplicationID
+```
+
+You can modify the following values:
+
+* `--name` (`-n`): Name of the application
+* `--email` (`-e`): Contact email.
+* `--phone` (`-c`): Contact phone.
+* `--two-factor`, (`-t`): Configures the two-factor authentication setting. Possible values are MANDATORY, OPT_IN and DISABLED.
+* `--lock-on-request`, (`-l`): Configures the lock on request setting. Possible values are MANDATORY, OPT_IN and DISABLED.
+
+Please note that if you don't pass any of these flags Latch will keep their original values.
+
+####Delete Application (`user application delete`)
+
+Command to delete an existing application, given it's Application's ID (`--app`, `-a`):
+
+```bash
+$ latch-cmd user application delete --app=MyApplicationID
+```
+
+####Show Applications (`user application show`)
+
+Command to show information about the existing applications:
+
+```bash
+$ latch-cmd user application show
+```
