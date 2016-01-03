@@ -11,6 +11,6 @@ var AboutCmd = &cobra.Command{
 	Short: "Version and authorship information",
 	Long:  `Version and authorship information`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("latch-cmd - version 0.1 - author:Mikel Pintor (millen@gmail.com) - more info at: https://github.com/millenc/latch-cmd")
+		fmt.Println("latch-cmd - version 1.0 - Mikel Pintor (millen@gmail.com) - more info at: https://github.com/millenc/latch-cmd")
 	},
 }
