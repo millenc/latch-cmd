@@ -6,12 +6,14 @@
 
 The easiest way to install *latch-cmd* on your system is to download one of the precompiled binaries that match your operating system and architecture:
 
-* Windows: 32 bits / 64 bits
-* Mac OS X: 32 bits / 64 bits
-* GNU/Linux: 32 bits / 64 bits
-* FreeBSD: 32 bits / 64 bits
+* Windows: [32 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_windows_386.zip) / [64 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_windows_amd64.zip)
+* Mac OS X: [32 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_darwin_386.zip) / [64 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_darwin_amd64.zip)
+* GNU/Linux: [32 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_linux_386.zip) / [64 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_linux_amd64.zip)
+* FreeBSD: [32 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_freebsd_386.zip) / [64 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_freebsd_amd64.zip)
+* NetBSD: [32 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_netbsd_386.zip) / [64 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_netbsd_amd64.zip)
+* OpenBSD: [32 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_openbsd_386.zip) / [64 bits](https://github.com/millenc/latch-cmd/releases/download/1.0/latch-cmd_openbsd_amd64.zip)
 
-and then place the executable file (`latch-cmd` or `latch-cmd.exe` for Windows) somewhere in your PATH (`/usr/bin` on UNIX-based systems for example). Make sure you have permissions to execute this file. Once installed, you can run this program by opening a terminal and writing:
+unzip it and then place the executable file (`latch-cmd` or `latch-cmd.exe` for Windows) somewhere in your PATH (`/usr/bin` on UNIX-based systems for example). Make sure you have permissions to execute this file. Once installed, you can run this program by opening a terminal and writing:
 
 ```bash
 $ latch-cmd
